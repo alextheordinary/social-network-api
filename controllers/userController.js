@@ -68,4 +68,35 @@ module.exports = {
         .catch((err) => res.status(500).json(err));
     },
 
+    // Function to POST a new friend to friends list
+
+    addFriend(req, res) {
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$addToSet: {friends: req.params.friendId}},
+            { runValidators: true, new: true }
+        )
+        .then((user) => {
+            !user
+                ? res.status(404).json({message: 'Invalid user ID'})
+                : res.json(user)
+        })
+        .catch((err) => res.status(500).json(err));
+    },
+
+    // Function to DELETE a friend from friend's list
+
+    removeFriend(req, res) {
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            {$pull: {friends: req.params.friendId}},
+            { runValidators: true, new: true }
+        )
+        .then((user) => {
+            !user
+                ? res.status(404).json({message: 'Invalid user ID'})
+                : res.json(user)
+        })
+        .catch((err) => res.status(500).json(err));
+    }
 };
