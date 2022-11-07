@@ -17,18 +17,55 @@ module.exports = {
 
     // Function to GET a single user by _id
 
+    getSingleUser(req, res) {
+        User.findOne({ _id: req.params.userId })
+            .then(async (user) => {
+                !user
+                    ? res.status(404).json({ message: 'Invalid user ID' })
+                    : res.json(user)
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
+
     // Function to POST a new user
 
     createUser(req, res) {
         User.create(req.body)
-        .then((user) => res.json(user))
-        .catch((err) => res.status(500).json(err));
-    }
+            .then((user) => res.json(user))
+            .catch((err) => res.status(500).json(err));
+    },
 
     // Function to update a user with a PUT by _id
 
-    // Function to DELETE a user by _id
+    updateUser(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true }
+        )
+            .then((user) => {
+                !user
+                    ? res.status(404).json({ message: 'Invalid user ID' })
+                    : res.json(user)
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
 
+    // Function to DELETE a user by _id - optional remove associated thoughts
 
+    deleteUser(req, res) {
+        User.findOneAndRemove({_id: req.params.userId})
+        .then((user) => {
+            !user
+            ? res.status(404).json({message: 'Invalid user ID'})
+            : Thought.deleteMany({_id: {$in: user.thoughts}})
+        })
+        .then(() => { res.json({message: 'User and thoughts deleted'})})
+        .catch((err) => res.status(500).json(err));
+    },
 
 };
