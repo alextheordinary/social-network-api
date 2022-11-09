@@ -63,9 +63,8 @@ module.exports = {
             // const thoughtArray = user.thoughts.map((a) => a.toString());
             !user
             ? res.status(404).json({message: 'Invalid user ID'})
-            :  Thought.deleteMany({_id: {$in: user.thoughts}})
+            : res.json(user)
         })
-        .then(() => { res.json({message: 'User and thoughts deleted'})})
         .catch((err) => res.status(500).json(err));
     },
 

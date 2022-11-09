@@ -73,19 +73,14 @@ module.exports = {
             .then((thought) => {
                 !thought
                     ? res.status(404).json({ message: 'Invalid thought ID' })
-                    : User.findOneAndUpdate(
-                        { username: thought.username },
-                        { $pull: { thoughts: thought._id } },
-                        { runValidators: true, new: true }
-                    )
+                    : res.json(thought)
             })
-            .then(() => { res.json({ message: 'Thought deleted and removed from user array' }) })
             .catch((err) => res.status(500).json(err));
     },
 
     // Function to POST a reaction to a thought's reactions array field
 
-
+    
 
     // Function to DELETE a reaction by the reaction's reactionId value
 
