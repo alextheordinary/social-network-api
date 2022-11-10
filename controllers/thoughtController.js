@@ -80,9 +80,45 @@ module.exports = {
 
     // Function to POST a reaction to a thought's reactions array field
 
-    
+    createReaction(req, res) {
+        const reactionBody = req.body.reactionBody;
+        const username = req.body.username;
+        // const userId = req.body.userId;
+        const thoughtId = req.params.thoughtId;
+        const newReaction = { reactionBody, username };
+        Thought.findOneAndUpdate(
+            {_id: thoughtId},
+            { $addToSet: { reactions: newReaction } },
+            { runValidators: true, new: true }
+            )
+            .then((thought) => {
+                !thought
+                    ? res.status(404).json({ message: 'Invalid thought ID' })
+                    : res.json(thought)
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            });
+    },
 
     // Function to DELETE a reaction by the reaction's reactionId value
 
+    deleteReaction(req, res) {
+        const thoughtId = req.params.thoughtId;
+        console.log(req.body.reactionId);
+        Thought.findOneAndUpdate(
+            {_id: thoughtId},
+            { $pull: { reactions: {reactionId: req.body.reactionId}  } },
+            { runValidators: true, new: true }
+            )
+            .then((thought) => {
+                !thought
+                    ? res.status(404).json({ message: 'Invalid thought ID' })
+                    : res.json(thought)
+            })
+            .catch((err) => {
+                res.status(500).json(err);
+            })
+    }
 
 }

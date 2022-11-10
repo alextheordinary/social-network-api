@@ -6,8 +6,10 @@ const { format } = require('date-fns');
 const reactionSchema = new Schema(
     {
         reactionId: {
-            type: Schema.Types.ObjectId,
-            default: new Types.ObjectId,
+            type: Types.ObjectId,
+            default: new Types.ObjectId(),
+            unique: true,
+            auto: true
         },
         reactionBody: {
             type: String,
@@ -15,12 +17,28 @@ const reactionSchema = new Schema(
             minLength: 1,
             maxLength: 280,
         },
+        username: {
+            type: String,
+            required: true,
+        },
         createdAt: {
             type: Date,
-            default: Date.now(),
-            get: (date) => format(date, 'MM/dd/yyyy h:mm a')
+            default: Date.now,
+            auto: true,
+            get: (date) => format(date, 'MM/dd/yyyy h:mm:ss a')
         },
-    }
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            getters: true,
+        },
+        toObject: {
+            virtuals: true,
+            getters: true,
+        },
+        _id: false,
+    },
 );
 
 // Schema to create a thought
@@ -35,8 +53,9 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now(),
-            get: (date) => format(date, 'MM/dd/yyyy h:mm a')
+            default: Date.now,
+            auto: true,
+            get: (date) => format(date, 'MM/dd/yyyy h:mm:ss a')
         },
         username: {
             type: String,
