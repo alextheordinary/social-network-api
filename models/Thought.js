@@ -8,7 +8,6 @@ const reactionSchema = new Schema(
         reactionId: {
             type: Types.ObjectId,
             default: new Types.ObjectId(),
-            unique: true,
             auto: true
         },
         reactionBody: {
@@ -70,6 +69,7 @@ const thoughtSchema = new Schema(
         },
         toObject: {
             virtuals: true,
+            getters: true
         },
     }
 );

@@ -62,10 +62,13 @@ module.exports = {
     deleteUser(req, res) {
         User.findOneAndRemove({ _id: req.params.userId })
             .then((user) => {
-                // const thoughtArray = user.thoughts.map((a) => a.toString());
                 !user
                     ? res.status(404).json({ message: 'Invalid user ID' })
-                    : res.json(user)
+                    :
+                    Thought.deleteMany({ _id: { $in: user.thoughts } })
+                        .then(
+                            res.json(user)
+                        )
             })
             .catch((err) => res.status(500).json(err));
     },
