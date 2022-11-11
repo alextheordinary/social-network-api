@@ -30,5 +30,7 @@ DELETE:
 * Remove a friend
 * Remove a reaction
 
-Demonstration video found at this link: 
+[Link to demo video](https://drive.google.com/file/d/1qLQa85EndxDf2qJyEHjXdHxipsYHzb81/view)
+
+[Link to repository](https://github.com/alextheordinary/social-network-api)
 
